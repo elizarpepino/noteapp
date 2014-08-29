@@ -8,11 +8,15 @@
 
 #import "FormViewController.h"
 
-@interface FormViewController ()
+@interface FormViewController () {
+    IBOutlet UITextField *_titleField;
+    IBOutlet UITextView *_bodyField;
+}
 
 @end
 
 @implementation FormViewController
+@synthesize delegate = _delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -53,7 +57,21 @@
 
 - (IBAction)save:(id)sender
 {
-    //TODO: process form inputs
+    // If body and title fields are empty, then we alert the user.
+    if ([_titleField.text isEqualToString:@""] || [_bodyField.text isEqualToString:@""]) {
+        if ([_titleField isFirstResponder]) {
+            [_titleField resignFirstResponder];
+        } else if ([_bodyField isFirstResponder]) {
+            [_bodyField resignFirstResponder];
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Save!" message:@"Title, or Body cannot be empty" delegate:self cancelButtonTitle:@"Try Again" otherButtonTitles:nil, nil];
+        [alert show];
+        
+        return;
+    }
+    // otherwise, process data
+    NSDictionary *fields = [NSDictionary dictionaryWithObjects:@[_titleField.text, _bodyField.text] forKeys:@[@"title", @"body" ]];
+    [self.delegate formDidSubmitWithFields:fields fromViewController:self];
 }
 
 @end

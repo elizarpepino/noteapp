@@ -10,7 +10,8 @@
 #import "Notes.h"
 #import "Note.h"
 #import "DetailViewController.h"
+#import "FormViewController.h"
 
-@interface TableViewController : UITableViewController
+@interface TableViewController : UITableViewController <FormViewDelegate>
 
 @end

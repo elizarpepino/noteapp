@@ -14,6 +14,7 @@
 // Instance methods
 - (Notes *)fetch;
 - (Notes *)fetchWithUrlString:(NSString *)urlString;
+- (Note *)createNoteFromDictionary:(NSDictionary *)note;
 - (void)setUrl:(NSString *)urlString;
 
 // Static methods

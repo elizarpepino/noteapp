@@ -131,8 +131,28 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"detailview"]) {
+        // get the tableviews selected indexpat so we can get our object from the `_notes` array
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         [[segue destinationViewController] setDetailsForNote:[_notes objectAtIndex:indexPath.row]];
+    } else if ([segue.identifier isEqualToString:@"formview"]) {
+        // let's make our self the formview controller's delegate
+        // so we can implement the formdidSubmit... method
+        [[segue destinationViewController] setDelegate:self];
+    }
+}
+
+#pragma mark - delegate methods
+- (void)formDidSubmitWithFields:(NSDictionary *)fields fromViewController:(UIViewController *)controller
+{
+    // TODO: notes api call for creating new note
+    [controller dismissViewControllerAnimated:YES completion:nil];
+    Note *note = [[Notes notes] createNoteFromDictionary:fields];
+    if (note) {
+        [_notes insertObject:note atIndex:0];
+        [self.tableView reloadData];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Save!" message:@"Error while processing your request." delegate:self cancelButtonTitle:@"Try Again" otherButtonTitles:nil, nil];
+        [alert show];
     }
 }
 

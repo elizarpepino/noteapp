@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FormViewController : UIViewController
+@protocol FormViewDelegate <NSObject>
 
+- (void)formDidSubmitWithFields:(NSDictionary *)fields fromViewController:(UIViewController *)controller;
+
+@end
+
+@interface FormViewController : UIViewController
+@property (nonatomic, retain) id <FormViewDelegate> delegate;
 @end
