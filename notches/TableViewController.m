@@ -79,8 +79,7 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleDefault];
     [cell setSelectedBackgroundView:bgView];
     [cell.selectedBackgroundView setBackgroundColor:[UIColor colorWithRed:11 green:110 blue:0 alpha:1]];
-    
-    [cell setTag:indexPath.row];
+
     return cell;
 }
 
