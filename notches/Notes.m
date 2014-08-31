@@ -41,18 +41,16 @@ Notes *_notesInstance = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                          returningResponse:nil
                                                      error:nil];
+    if (!data) {
+        return [self displayErrorWithTitle:@"DB Error" andDescription:@"Could not create database. Please check your network connection and try again!"];
+    }
     
     NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data
                                                              options:NSJSONReadingMutableContainers
                                                                error:nil];
     
     if (!jsonData || [jsonData valueForKey:@"error"]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connection Error"
-                                                        message:@"Please check your network connection"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil, nil];
-        [alert show];
+        return [self displayErrorWithTitle:@"Connection Error" andDescription:[jsonData valueForKey:@"error"]];
     } else {
         // re fetch data
         [self fetch];
@@ -66,6 +64,10 @@ Notes *_notesInstance = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                          returningResponse:nil
                                                      error:nil];
+    
+    if (!data) {
+        return nil;
+    }
     
     NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data
                                                              options:NSJSONReadingMutableContainers
@@ -126,6 +128,10 @@ Notes *_notesInstance = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                          returningResponse:nil
                                                      error:nil];
+    if (!data) {
+        return nil;
+    }
+    
     // If data is available let's grab `em
     NSMutableDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
     // check if response does not have an `error`
@@ -163,6 +169,16 @@ Notes *_notesInstance = nil;
         _models = [[NSMutableArray alloc] init];
     }
     [_models insertObject:note atIndex:0];
+}
+
+- (void)displayErrorWithTitle:(NSString *)title andDescription:(NSString *)description
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:description
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil, nil];
+    [alert show];
 }
 
 @end

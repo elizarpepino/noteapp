@@ -34,6 +34,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     NSArray *notes = [[[Notes notes] fetchWithUrlString:@"http://localhost:5984/notes"] models];
+    if (!notes) {
+        return;
+    }
+    
+    // init _notes array and insert the new collection
     if (!_notes) {
         _notes = [[NSMutableArray alloc] init];
     }
