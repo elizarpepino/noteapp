@@ -10,6 +10,7 @@
 
 @protocol FormViewDelegate <NSObject>
 
+@required
 - (void)formDidSubmitWithFields:(NSDictionary *)fields fromViewController:(UIViewController *)controller;
 
 @end

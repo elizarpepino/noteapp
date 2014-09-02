@@ -42,7 +42,7 @@ Notes *_notesInstance = nil;
                                          returningResponse:nil
                                                      error:nil];
     if (!data) {
-        return [self displayErrorWithTitle:@"DB Error" andDescription:@"Could not create database. Please check your network connection and try again!"];
+        return [Notes displayErrorWithTitle:@"DB Error" andDescription:@"Could not create database. Please check your network connection and try again!"];
     }
     
     NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data
@@ -50,7 +50,7 @@ Notes *_notesInstance = nil;
                                                                error:nil];
     
     if (!jsonData || [jsonData valueForKey:@"error"]) {
-        return [self displayErrorWithTitle:@"Connection Error" andDescription:[jsonData valueForKey:@"error"]];
+        return [Notes displayErrorWithTitle:@"Connection Error" andDescription:[jsonData valueForKey:@"error"]];
     } else {
         // re fetch data
         [self fetch];
@@ -156,9 +156,17 @@ Notes *_notesInstance = nil;
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZZ"];
+    NSString *rev;
+    
+    if ([obj valueForKeyPath:@"doc._rev"]) {
+        rev = [obj valueForKeyPath:@"doc._rev"];
+    } else {
+        rev = [obj valueForKey:@"rev"];
+    }
     
     Note *note = [[Note alloc] init];
-    note.id = (int) [obj valueForKey:@"id"];
+    note.id = [obj valueForKey:@"id"];
+    note.rev = rev;
     note.url = [NSString stringWithFormat:@"%@/%@", _url,[obj valueForKey:@"id"]];
     note.title = [obj valueForKeyPath:@"doc.title"];
     note.body = [obj valueForKeyPath:@"doc.body"];
@@ -171,7 +179,7 @@ Notes *_notesInstance = nil;
     [_models insertObject:note atIndex:0];
 }
 
-- (void)displayErrorWithTitle:(NSString *)title andDescription:(NSString *)description
++ (void)displayErrorWithTitle:(NSString *)title andDescription:(NSString *)description
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                     message:description

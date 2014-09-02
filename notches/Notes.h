@@ -19,6 +19,6 @@
 
 // Static methods
 + (Notes *)notes;
-
++ (void)displayErrorWithTitle:(NSString *)title andDescription:(NSString *)description;
 @property (nonatomic, strong) NSMutableArray *models;
 @end

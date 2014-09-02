@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface Note : NSObject
-@property int id;
+@property (nonatomic, strong) NSString *id;
+@property (nonatomic, strong) NSString *rev;
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *body;
 @property (nonatomic, strong) NSDate *dateCreated;
 @property (nonatomic, strong) NSDate *dateUpdated;
+
+- (BOOL)remove;
 @end
